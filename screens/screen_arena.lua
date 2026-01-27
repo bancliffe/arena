@@ -1,8 +1,5 @@
 function screen_arena_init()
     make_map()    
-    -- setup players and enemies
-    players={}
-    enemies={}
     setup_match()    
     -- zoom variables
     zoom=1
@@ -62,14 +59,12 @@ end
 
 function screen_arena_draw()
     cls()
-    
     -- set camera and clip
     camera(cam_x,cam_y)
     clip(0,0,128,128)
 
     draw_map()
-    draw_units()
-
+    
     -- reset camera and clip
     camera()
     clip()
@@ -89,6 +84,8 @@ function make_map()
             tile.y=y
             tile.selected=false
             tile.enabled=true
+            tile.unit=nil
+            tile.terrain=nil
             add(row,tile)
         end
         add(map,row)
@@ -133,44 +130,48 @@ function draw_map()
             if tile.enabled then
                 local x=tile.x*8*zoom
                 local y=tile.y*8*zoom
-                local size=8*zoom
+                local size=7*zoom
                 rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
+                if tile.unit then
+                    palt(0,false)
+                    palt(14,true)
+                    sspr(tile.unit.sx,tile.unit.sy,8,8,(tile.unit.x)*8*zoom,(tile.unit.y)*8*zoom,8*zoom,8*zoom, false, false)
+                    palt()
+                end
+
+                if tile.terrain then
+                    if tile.terrain=="full_cover" then
+                        sspr(24,0,8,8,(tile.x)*8*zoom,(tile.y)*8*zoom,8*zoom,8*zoom, false, false)
+                    end
+                end
             end            
         end
     end
     local tile=map[map_selected_x][map_selected_y]
     local x=tile.x*8*zoom
     local y=tile.y*8*zoom
-    local size=8*zoom
+    local size=7*zoom
     rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
 end
 
-function draw_units()
-    palt(0,false)
-    palt(14,true)
-    for c in all(players) do
-        sspr(c.sx,c.sy,8,8,(c.x)*8*zoom,(c.y)*8*zoom,8*zoom,8*zoom, false, false)
-    end
-
-    for e in all(enemies) do
-        sspr(e.sx,e.sy,8,8,(e.x)*8*zoom,(e.y)*8*zoom,8*zoom,8*zoom, false, false)
-    end
-    palt()
-end
-
 function setup_match()
-    -- setup the intro match
     local c = make_character()
-    log("Player character created: "..c.name)
-    add(players,c)
-    enemies={}
+    map[c.x][c.y].unit=c
     for i=1,2 do
         local e=make_enemy()
         e.name=e.name.." "..i
         e.x=14
         e.y=3+i
-        log("Enemy created: "..e.name)
-        add(enemies,e)
+        map[e.x][e.y].unit=e
     end
-    log("Match setup complete. Players: "..#players..", Enemies: "..#enemies)
+    -- setup random terrain
+    for i=1,5 do
+        local tx=flr(rnd(map_width-2))+2
+        local ty=flr(rnd(map_height-2))+2
+        if map[tx][ty].enabled then
+            map[tx][ty].terrain="full_cover"
+        else
+            i-=1
+        end
+    end
 end

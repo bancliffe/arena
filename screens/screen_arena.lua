@@ -1,7 +1,12 @@
 function screen_arena_init()
     make_map()    
+    -- setup players and enemies
+    players={}
+    enemies={}
+    setup_match()    
     -- zoom variables
     zoom=1
+    dest_zoom=2
     cam_x=0
     cam_y=0
     dest_cam_x=0
@@ -9,12 +14,12 @@ function screen_arena_init()
 end
 
 function screen_arena_update()
-    if btn(❎) then
-        zoom=min(zoom+0.1,4)
+    if btnp(❎) then
+        dest_zoom=min(dest_zoom+1,4)
     end
     
-    if btn(🅾️) then
-        zoom=max(zoom-0.1,1)
+    if btnp(🅾️) then
+        dest_zoom=max(dest_zoom-1,1)
     end
 
     map[map_selected_x][map_selected_y].selected=false
@@ -41,7 +46,9 @@ function screen_arena_update()
     map_selected_x=mid(1,map_selected_x,map_width)
     map_selected_y=mid(1,map_selected_y,map_height)
     map[map_selected_x][map_selected_y].selected=true
-    
+
+    -- smooth zooming
+    zoom+=(dest_zoom-zoom)*0.2
     -- center camera on selected tile
     local tile_center_x=(map_selected_x*8)*zoom-4*zoom
     local tile_center_y=(map_selected_y*8)*zoom-4*zoom
@@ -59,28 +66,10 @@ function screen_arena_draw()
     -- set camera and clip
     camera(cam_x,cam_y)
     clip(0,0,128,128)
-    
-    -- draw scaled
-    for x=1,map_width do
-        for y=1,map_height do
-            local tile=map[x][y]
-            if tile.enabled then
-                local x=tile.x*8*zoom
-                local y=tile.y*8*zoom
-                local size=8*zoom
-                rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
-                print(tile.x..","..tile.y,x+2,y+2,7)
-            end            
-        end
-    end
-    local tile=map[map_selected_x][map_selected_y]
-    local x=tile.x*8*zoom
-    local y=tile.y*8*zoom
-    local size=8*zoom
-    rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
-    print(tile.x..","..tile.y,x+2,y+2,7)
 
-    
+    draw_map()
+    draw_units()
+
     -- reset camera and clip
     camera()
     clip()
@@ -135,4 +124,53 @@ function make_map()
     map[12][9].enabled=false
     map[11][1].enabled=false
     map[11][9].enabled=false
+end
+
+function draw_map()
+    for x=1,map_width do
+        for y=1,map_height do
+            local tile=map[x][y]
+            if tile.enabled then
+                local x=tile.x*8*zoom
+                local y=tile.y*8*zoom
+                local size=8*zoom
+                rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
+            end            
+        end
+    end
+    local tile=map[map_selected_x][map_selected_y]
+    local x=tile.x*8*zoom
+    local y=tile.y*8*zoom
+    local size=8*zoom
+    rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
+end
+
+function draw_units()
+    palt(0,false)
+    palt(14,true)
+    for c in all(players) do
+        sspr(c.sx,c.sy,8,8,(c.x)*8*zoom,(c.y)*8*zoom,8*zoom,8*zoom, false, false)
+    end
+
+    for e in all(enemies) do
+        sspr(e.sx,e.sy,8,8,(e.x)*8*zoom,(e.y)*8*zoom,8*zoom,8*zoom, false, false)
+    end
+    palt()
+end
+
+function setup_match()
+    -- setup the intro match
+    local c = make_character()
+    log("Player character created: "..c.name)
+    add(players,c)
+    enemies={}
+    for i=1,2 do
+        local e=make_enemy()
+        e.name=e.name.." "..i
+        e.x=14
+        e.y=3+i
+        log("Enemy created: "..e.name)
+        add(enemies,e)
+    end
+    log("Match setup complete. Players: "..#players..", Enemies: "..#enemies)
 end

@@ -58,7 +58,10 @@ function screen_arena_update()
 end
 
 function screen_arena_draw()
-    cls()
+    cls(1)
+    fillp(0x8525)
+    rectfill(0,0,128,128,0x0001)
+    fillp()
     -- set camera and clip
     camera(cam_x,cam_y)
     clip(0,0,128,128)
@@ -124,6 +127,9 @@ function make_map()
 end
 
 function draw_map()
+    rrectfill(0*zoom,0*zoom,((map_width*8)+16)*zoom,((map_height*8)+16)*zoom,96,13)
+    rrectfill(8*zoom,8*zoom,map_width*8*zoom,map_height*8*zoom,96,0) -- ground
+
     for x=1,map_width do
         for y=1,map_height do
             local tile=map[x][y]
@@ -131,7 +137,7 @@ function draw_map()
                 local x=tile.x*8*zoom
                 local y=tile.y*8*zoom
                 local size=7*zoom
-                rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
+                rect(x,y,x+size,y+size,tile.selected and 8 or 5 )
                 if tile.unit then
                     palt(0,false)
                     palt(14,true)
@@ -147,11 +153,11 @@ function draw_map()
             end            
         end
     end
-    local tile=map[map_selected_x][map_selected_y]
-    local x=tile.x*8*zoom
-    local y=tile.y*8*zoom
+    -- draw selection rectangle
+    local x=map_selected_x*8*zoom
+    local y=map_selected_y*8*zoom
     local size=7*zoom
-    rect(x,y,x+size,y+size,tile.selected and 8 or 7 )
+    rect(x,y,x+size,y+size,8)
 end
 
 function setup_match()

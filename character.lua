@@ -4,7 +4,9 @@ function make_character()
     c.y=4
     c.sx=8
     c.sy=0
-    c.name="Gnorlash"
+    c.portrait_sx=40
+    c.portrait_sy=0 
+    c.name="gnorlash"
     c.rank=0
     c.initiative_modifier=0
     c.dedication=150
@@ -13,10 +15,10 @@ function make_character()
     c.favor_of_the_crowd=false
     c.determination=0
     c.momentum=0
-    c.health_max=rnd(6)+1+15
+    c.health_max=flr(rnd(6))+1+15
     c.health_current=c.health_max
     c.bloodied=false
-    c.aether_max=rnd(6)+1+10
+    c.aether_max=flr(rnd(6))+1+10
     c.aether_current=c.aether_max
     c.stamina=10
     c.speed=2
@@ -65,6 +67,8 @@ function make_enemy()
     e.y=1
     e.sx=16
     e.sy=0
+    e.portrait_sx=48
+    e.portrait_sy=0
     e.name="skeletal horror"
     e.role="melee"
     e.type="undead"

@@ -71,6 +71,10 @@ function screen_arena_draw()
     -- reset camera and clip
     camera()
     clip()
+    if map[map_selected_x][map_selected_y].unit then
+        local unit=map[map_selected_x][map_selected_y].unit
+        draw_portrait(unit,2,2,124,16)
+    end
 end
 
 function make_map()
@@ -180,4 +184,24 @@ function setup_match()
             i-=1
         end
     end
+end
+
+function draw_portrait(unit,x,y,width,height)
+    rrectfill(x,y,width,height-1,3,2)
+    rrect(x,y,width,height-1,3,0)
+    palt(0,false)
+    palt(14,true)
+    sspr(unit.portrait_sx,unit.portrait_sy,8,8,x,y,16,16,false,false)
+    print(unit.name,x+18,y+2,7)
+    if unit.health then 
+        -- enemy unit
+        print("HP: "..unit.health,x+18,y+8,8)
+    else
+        -- player character
+        print("STAMINA:"..unit.stamina,x+18,y+8,13)
+        print("HP:"..unit.health_current.."/"..unit.health_max,x+64,y+2,8)
+        print("AETHER:"..unit.aether_current.."/"..unit.aether_max,x+64,y+8,12)
+    end
+
+    palt()    
 end

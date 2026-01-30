@@ -25,27 +25,26 @@ function make_character()
     c.magic_resistance=40
     c.exhaustion=0
     c.shock=0
-    c.skills={
-        {skill="acrobatics",value=10},
-        {skill="athletics",value=10},
-        {skill="dodge",value=10},
-        {skill="endurance",value=0},
-        {skill="medicine",value=0},
-        {skill="resolve",value=10},
-        {skill="stealth",value=0},
-        {skill="armor_piercing",value=0},
-        {skill="axes",value=0},
-        {skill="bows_and_crossbows",value=0},
-        {skill="daggers_and_knives",value=0},
-        {skill="firearms",value=0},
-        {skill="bludgeoning",value=0},
-        {skill="slingshots",value=0},
-        {skill="spears_and_polearms",value=0},
-        {skill="swords",value=0},
-        {skill="throwing_weapons",value=0},
-        {skill="unarmed_combat",value=0},
-        {skill="whips_and_chains",value=0}
-    }    
+    c.skills={}
+    c.skills["acrobatics"]=10
+    c.skills["athletics"]=10
+    c.skills["dodge"]=10
+    c.skills["endurance"]=0
+    c.skills["medicine"]=0
+    c.skills["resolve"]=10
+    c.skills["stealth"]=0
+    c.skills["armor_piercing"]=0
+    c.skills["axes"]=0
+    c.skills["bows_and_crossbows"]=0
+    c.skills["daggers_and_knives"]=0
+    c.skills["firearms"]=0
+    c.skills["bludgeoning"]=0
+    c.skills["slingshots"]=0
+    c.skills["spears_and_polearms"]=0
+    c.skills["swords"]=0
+    c.skills["throwing_weapons"]=0
+    c.skills["unarmed_combat"]=0
+    c.skills["whips_and_chains"]=0
     c.gear={
         {slot="main_hand",contents=nil},
         {slot="off_hand",contents=nil},

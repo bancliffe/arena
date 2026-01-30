@@ -8,6 +8,10 @@ function screen_arena_init()
     cam_y=0
     dest_cam_x=0
     dest_cam_y=0
+    chosen_stat=1
+    choices={"dodge", "athletics", "endurance", "resolve","medicine", "stealth"}
+    _update=popup_starting_bonus_update
+    _draw=popup_starting_bonus_draw
 end
 
 function screen_arena_update()
@@ -184,6 +188,7 @@ function setup_match()
             i-=1
         end
     end
+    player_character=c
 end
 
 function draw_portrait(unit,x,y,width,height)
@@ -204,4 +209,69 @@ function draw_portrait(unit,x,y,width,height)
     end
 
     palt()    
+end
+
+function popup_starting_bonus_update()   
+    if btnp(⬆️) then
+        chosen_stat=mid(1,chosen_stat-1,#choices)
+    end
+    if btnp(⬇️) then
+        chosen_stat=mid(1,chosen_stat+1,#choices)
+    end
+    if btnp(❎) then
+        local stat=choices[chosen_stat]
+        player_character.skills[choices[chosen_stat]]+=10
+        
+        -- close popup
+        _update=popup_starting_boost_update
+        _draw=popup_starting_boost_draw
+        chosen_stat=1
+    end
+    if btnp(🅾️) then
+        -- close popup without choosing
+        _update=screen_menu_update
+        _draw=screen_menu_draw
+    end
+end
+
+function popup_starting_bonus_draw()
+    cls(0)
+    rectfill(1,1,126,9,1)
+    printc("character background",64,3,7)
+    printc("choose a stat to receive a +10",64,16,7)    
+    printc("starting bonus",64,22,7)
+    for i=1,#choices do
+        printc(choices[i],64,58+(i-1)*6,chosen_stat==i and 7 or 5)
+    end
+end
+
+function popup_starting_boost_update()
+    if btnp(⬆️) then
+        chosen_stat=mid(1,chosen_stat-1,#choices)
+    end
+    if btnp(⬇️) then
+        chosen_stat=mid(1,chosen_stat+1,#choices)
+    end
+    if btnp(❎) then
+        local stat=choices[chosen_stat]
+        player_character.skills[choices[chosen_stat]]+=10
+        
+        -- close popup
+        _update=screen_arena_update
+        _draw=screen_arena_draw
+    end
+    if btnp(🅾️) then
+        -- go back a step and reset character
+        player_character = make_character()
+        _update=popup_starting_bonus_update
+        _draw=popup_starting_bonus_draw
+    end
+end
+function popup_starting_boost_draw()
+    cls(0)
+    rectfill(1,1,126,9,1)
+    printc("character background",64,3,7)
+    printc("choose a starting focus",64,16,7)    
+    printc("improve health +5",64,58,chosen_stat==i and 7 or 5)
+    printc("improve aether +5",64,64,chosen_stat==i and 7 or 5)
 end

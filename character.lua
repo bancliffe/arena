@@ -43,7 +43,7 @@ function make_character()
     c.skills["spears_and_polearms"]=0
     c.skills["swords"]=0
     c.skills["throwing_weapons"]=0
-    c.skills["unarmed_combat"]=0
+    c.skills["unarmed_combat_and_fist_weapons"]=0
     c.skills["whips_and_chains"]=0
     c.gear={
         {slot="main_hand",contents=nil},
@@ -90,4 +90,23 @@ function make_enemy()
         {roll_check=6,name="haunting wail",type="magical",range="close burst 1",targets=1,target_type="creature", damage="D0",effect="daze"}
     }
     return e
+end
+
+function load_weapons()
+    weapon_string="melee,bardiche,slashing,spears_and_polearms,2,0,two-handed|melee,bastard sword,slashing,swords,1,5,versatile;parrying|melee,cestus,bludgeoning,unarmed_combat_and_fist_weapons,1,20,simple"
+    weapons={}
+    local weapon_entries=split(weapon_string,"|")
+    for weapon_entry in all(weapon_entries) do
+        local w={}
+        local weapon_fields=split(weapon_entry,",")
+        w.type=weapon_fields[1]
+        w.name=weapon_fields[2]
+        w.damage_type=weapon_fields[3]
+        w.skill=weapon_fields[4]
+        w.range=tonum(weapon_fields[5])
+        w.speed=tonum(weapon_fields[6])
+        w.traits=split(weapon_fields[7],";")
+        add(weapons,w)
+    end
+    return weapons
 end

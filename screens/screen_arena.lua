@@ -1,6 +1,8 @@
 function screen_arena_init()
-    make_map()    
-    setup_match()    
+    make_map()
+    create_character()    
+    setup_match("intro")    
+    
     -- zoom variables
     zoom=1
     dest_zoom=2
@@ -8,8 +10,9 @@ function screen_arena_init()
     cam_y=0
     dest_cam_x=0
     dest_cam_y=0
-    chosen_stat=1
-    choices={"dodge", "athletics", "endurance", "resolve","medicine", "stealth"}
+
+    chosen_stat=1 -- for popup choices
+    choices={} -- used for popup choices
     _update=popup_starting_bonus_update
     _draw=popup_starting_bonus_draw
 end
@@ -168,27 +171,33 @@ function draw_map()
     rect(x,y,x+size,y+size,8)
 end
 
-function setup_match()
+function create_character()
     local c = make_character()
     map[c.x][c.y].unit=c
-    for i=1,2 do
-        local e=make_enemy()
-        e.name=e.name.." "..i
-        e.x=14
-        e.y=3+i
-        map[e.x][e.y].unit=e
-    end
-    -- setup random terrain
-    for i=1,5 do
-        local tx=flr(rnd(map_width-2))+2
-        local ty=flr(rnd(map_height-2))+2
-        if map[tx][ty].enabled then
-            map[tx][ty].terrain="full_cover"
-        else
-            i-=1
+    player_character=c
+end
+
+function setup_match(type)
+    if type=="intro" then
+        -- create enemies
+        for i=1,2 do
+            local e=make_enemy()
+            e.name=e.name.." "..i
+            e.x=14
+            e.y=3+i
+            map[e.x][e.y].unit=e
+        end
+        -- setup random terrain
+        for i=1,3 do
+            local tx=flr(rnd(map_width-2))+2
+            local ty=flr(rnd(map_height-2))+2
+            if map[tx][ty].enabled then
+                map[tx][ty].terrain="full_cover"
+            else
+                i-=1
+            end
         end
     end
-    player_character=c
 end
 
 function draw_portrait(unit,x,y,width,height)
@@ -211,7 +220,8 @@ function draw_portrait(unit,x,y,width,height)
     palt()    
 end
 
-function popup_starting_bonus_update()   
+function popup_starting_bonus_update()
+    choices={"dodge", "athletics", "endurance", "resolve","medicine", "stealth"}   
     if btnp(⬆️) then
         chosen_stat=mid(1,chosen_stat-1,#choices)
     end
@@ -223,8 +233,8 @@ function popup_starting_bonus_update()
         player_character.skills[choices[chosen_stat]]+=10
         
         -- close popup
-        _update=popup_starting_boost_update
-        _draw=popup_starting_boost_draw
+        _update=popup_starting_focus_update
+        _draw=popup_starting_focus_draw
         chosen_stat=1
     end
     if btnp(🅾️) then
@@ -245,7 +255,8 @@ function popup_starting_bonus_draw()
     end
 end
 
-function popup_starting_boost_update()
+function popup_starting_focus_update()
+    choices={"health_max", "aether_max"}
     if btnp(⬆️) then
         chosen_stat=mid(1,chosen_stat-1,#choices)
     end
@@ -254,11 +265,11 @@ function popup_starting_boost_update()
     end
     if btnp(❎) then
         local stat=choices[chosen_stat]
-        player_character.skills[choices[chosen_stat]]+=10
+        player_character[choices[chosen_stat]]+=5
         
         -- close popup
-        _update=screen_arena_update
-        _draw=screen_arena_draw
+        _update=popup_starting_weapon_update
+        _draw=popup_starting_weapon_draw
     end
     if btnp(🅾️) then
         -- go back a step and reset character
@@ -267,11 +278,24 @@ function popup_starting_boost_update()
         _draw=popup_starting_bonus_draw
     end
 end
-function popup_starting_boost_draw()
+
+function popup_starting_focus_draw()
     cls(0)
     rectfill(1,1,126,9,1)
-    printc("character background",64,3,7)
-    printc("choose a starting focus",64,16,7)    
-    printc("improve health +5",64,58,chosen_stat==i and 7 or 5)
-    printc("improve aether +5",64,64,chosen_stat==i and 7 or 5)
+    printc("character focus",64,3,7)
+    printc("choose a starting focus",64,16,7)
+    printc("improve health +5",64,58,chosen_stat==1 and 7 or 5)
+    printc("improve aether +5",64,64,chosen_stat==2 and 7 or 5) 
+end
+
+function popup_starting_weapon_update()
+    -- to be implemented 
+end
+
+function popup_starting_weapon_draw()
+    cls(0)
+    rectfill(1,1,126,9,1)
+    printc("character equipment",64,3,7)
+    printc("choose a starting weapon",64,16,7)
+    
 end

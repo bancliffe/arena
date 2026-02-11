@@ -45,7 +45,7 @@ function make_character()
     c.skills["throwing_weapons"]=0
     c.skills["unarmed_combat_and_fist_weapons"]=0
     c.skills["whips_and_chains"]=0
-    c.gear={
+    c.equipment={
         {slot="main_hand",contents=nil},
         {slot="off_hand",contents=nil},
         {slot="belt",contents=nil},
@@ -110,4 +110,10 @@ function load_weapons()
         log("loaded weapon: "..w.name)
     end
     return weapons
+end
+
+function load_armor()
+    armor_string="harness,0,0,maneuverability:+10|heavy cloth,1,d4,maneuverability:+5"
+    armor={}
+    return armor
 end

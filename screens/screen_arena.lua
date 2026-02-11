@@ -148,7 +148,7 @@ function draw_map()
             if tile.enabled then
                 local x=tile.x*8*zoom
                 local y=tile.y*8*zoom
-                local size=7*zoom
+                local size=8*zoom
                 rect(x,y,x+size,y+size,tile.selected and 8 or 5 )
                 if tile.unit then
                     palt(0,false)
@@ -168,7 +168,7 @@ function draw_map()
     -- draw selection rectangle
     local x=map_selected_x*8*zoom
     local y=map_selected_y*8*zoom
-    local size=7*zoom
+    local size=8*zoom
     rect(x,y,x+size,y+size,8)
 end
 

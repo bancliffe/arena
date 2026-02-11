@@ -107,6 +107,7 @@ function load_weapons()
         w.speed=tonum(weapon_fields[6])
         w.traits=split(weapon_fields[7],";")
         add(weapons,w)
+        log("loaded weapon: "..w.name)
     end
     return weapons
 end

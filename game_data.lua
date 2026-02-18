@@ -43,7 +43,7 @@ function make_character()
     c.skills["spears_and_polearms"]=0
     c.skills["swords"]=0
     c.skills["throwing_weapons"]=0
-    c.skills["unarmed_combat_and_fist_weapons"]=0
+    c.skills["fist"]=0
     c.skills["whips_and_chains"]=0
     c.equipment={
         {slot="main_hand",contents=nil},
@@ -93,8 +93,10 @@ function make_enemy()
 end
 
 function load_weapons()
-    weapon_string="melee,bardiche,slashing,spears_and_polearms,2,0,two-handed|melee,bastard sword,slashing,swords,1,5,versatile;parrying|melee,cestus,bludgeoning,unarmed_combat_and_fist_weapons,1,20,simple"
+    log("loaded weapons from string")
+    weapon_string="melee,bardiche,slashing,spears_and_polearms,2,0,two-handed,0,8|melee,bastard sword,slashing,swords,1,5,versatile;parrying,8,8|melee,billhook,slashing,spears_and_polearms,2,0,two-handed,16,8|melee,cestus,bludgeoning,fist,1,20,simple,24,8|melee,claw,slashing,fist,1,20,parrying,32,8|melee,club,bludgeoning,bludgeoning_weapons,1,5,simple,40,8|melee,dagger,piercing,daggers_and_knives,1,20,thrown,48,8|melee,flail,bludgeoning,bludgeoning_weapons,1,5,none,56,8|melee,footman's maul,bludgeoning,spear_and_polearms,2,-10,two-handed,64,8|melee,glaive,slashing,spears_and_polearms,2,0,two-handed,72,8|melee,greataxe,slashing,axes,1,-10,two-handed,80,8"
     weapons={}
+    weapon_types={{skill="spears_and_polearms",name="spears & polearms"},{skill="swords",name="swords"},{skill="fist",name="fist"},{skill="daggers_and_knives",name="daggers & knives"},{skill="bludgeoning",name="bludgeoning"},{skill="axes",name="axes"},{skill="whip_and_chains",name="whip & chains"},{skill="armor_piercing",name="armor piercing"},{skill="firearms",name="firearms"},{skill="slingshots",name="slingshots"},{skill="throwing",name="throwing"},{skill="bows_and_crossbows",name="bows & crossbows"}}
     local weapon_entries=split(weapon_string,"|")
     for weapon_entry in all(weapon_entries) do
         local w={}
@@ -106,14 +108,27 @@ function load_weapons()
         w.range=tonum(weapon_fields[5])
         w.speed=tonum(weapon_fields[6])
         w.traits=split(weapon_fields[7],";")
-        add(weapons,w)
-        log("loaded weapon: "..w.name)
+        w.icon_sx=tonum(weapon_fields[8])
+        w.icon_sy=tonum(weapon_fields[9])
+        add(weapons,w)        
     end
     return weapons
 end
 
 function load_armor()
-    armor_string="harness,0,0,maneuverability:+10|heavy cloth,1,d4,maneuverability:+5"
+    log("loading armor from string")
+    armor_string="harness,0,0,maneuverability:+10|heavy cloth,1,d4,maneuverability:+5|soft leather,1,d6,maneuverability:+5|studded leather,2,d8,maneuverability:+0|chainmail,3,d10,maneuverability:-5|plate,4,d12,maneuverability:+0|hide scale,1,d8,maneuverability:-5|mail,1,d10,maneuverability:-10|brigandine,2,d10,maneuverability:-15;max_stamina:-2|plate,3,d12,maneuverability:-20;max_stamina:-4"
     armor={}
+    local armor_entries=split(armor_string,"|")
+    for armor_entry in all(armor_entries) do
+        local a={}
+        local armor_fields=split(armor_entry,",")
+        a.name=armor_fields[1]
+        a.protection=armor_fields[2]
+        a.integrity=armor_fields[3]
+        local traits=split(armor_fields[4],";")
+        a.stat_changes=traits
+        add(armor,a)        
+    end
     return armor
 end

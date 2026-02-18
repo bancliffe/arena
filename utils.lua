@@ -4,7 +4,7 @@ function printc(text,x, y, col)
 end
 
 function log(string)
-    printh(string, "log.txt", false)
+    printh(get_local_time()..": "..string, "log.txt", false)
 end
 
 function get_local_time()

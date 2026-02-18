@@ -2,6 +2,7 @@ function screen_arena_init()
     make_map()
     create_character()
     load_weapons()    
+    load_armor()
     setup_match("intro")    
     
     -- zoom variables
@@ -12,7 +13,7 @@ function screen_arena_init()
     dest_cam_x=0
     dest_cam_y=0
 
-    chosen_stat=1 -- for popup choices
+    choice=1 -- for popup choices
     choices={} -- used for popup choices
     _update=popup_starting_bonus_update
     _draw=popup_starting_bonus_draw

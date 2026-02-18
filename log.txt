@@ -1,5 +1,5 @@
-2026-2-11 9:46:53: Game started
-loaded weapon: bardiche
-loaded weapon: bastard sword
-loaded weapon: cestus
-chosen weapon: bardiche
+2026-2-18 10:23:46: Game started
+2026-2-18 10:23:46: loaded weapons from string
+2026-2-18 10:23:46: loading armor from string
+2026-2-18 10:23:46: chosen starting bonus: dodge +10
+2026-2-18 10:23:47: chosen focus: health_max increased by 5

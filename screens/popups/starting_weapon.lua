@@ -55,7 +55,7 @@ function popup_starting_weapon_draw()
 end
 
 function draw_weapon_preview()
-    rrectfill(64,36,64,92,8,1)
+    rrectfill(64,36,62,90,8,1)
     if #weapons_in_type==0 then return end
     palt(14,true)
     palt(0,false)

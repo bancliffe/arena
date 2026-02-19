@@ -1,5 +1,10 @@
-2026-2-18 10:23:46: Game started
-2026-2-18 10:23:46: loaded weapons from string
-2026-2-18 10:23:46: loading armor from string
-2026-2-18 10:23:46: chosen starting bonus: dodge +10
-2026-2-18 10:23:47: chosen focus: health_max increased by 5
+2026-2-19 10:14:2: Game started
+2026-2-19 10:14:2: loaded weapons from string
+2026-2-19 10:14:2: loaded 37 melee weapons
+2026-2-19 10:14:2: loaded 12 ranged weapons
+2026-2-19 10:14:2: returning 49 total weapons
+2026-2-19 10:14:2: loading shields from string
+2026-2-19 10:14:2: loading armor from string
+2026-2-19 10:14:3: chosen starting bonus: endurance +10
+2026-2-19 10:14:4: chosen focus: aether_max increased by 5
+2026-2-19 10:14:5: chosen weapon: scythe

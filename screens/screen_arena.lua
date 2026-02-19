@@ -1,8 +1,9 @@
 function screen_arena_init()
     make_map()
     create_character()
-    load_weapons()    
-    load_armor()
+    weapons=load_weapons()    
+    shields=load_shields()
+    armor=load_armor()    
     setup_match("intro")    
     
     -- zoom variables

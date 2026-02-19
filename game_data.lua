@@ -94,25 +94,18 @@ end
 
 function load_weapons()
     log("loaded weapons from string")
-    weapon_string="melee,bardiche,slashing,spears_and_polearms,2,0,two-handed,0,8|melee,bastard sword,slashing,swords,1,5,versatile;parrying,8,8|melee,billhook,slashing,spears_and_polearms,2,0,two-handed,16,8|melee,cestus,bludgeoning,fist,1,20,simple,24,8|melee,claw,slashing,fist,1,20,parrying,32,8|melee,club,bludgeoning,bludgeoning_weapons,1,5,simple,40,8|melee,dagger,piercing,daggers_and_knives,1,20,thrown,48,8|melee,flail,bludgeoning,bludgeoning_weapons,1,5,none,56,8|melee,footman's maul,bludgeoning,spear_and_polearms,2,-10,two-handed,64,8|melee,glaive,slashing,spears_and_polearms,2,0,two-handed,72,8|melee,greataxe,slashing,axes,1,-10,two-handed,80,8"
-    weapons={}
-    weapon_types={{skill="spears_and_polearms",name="spears & polearms"},{skill="swords",name="swords"},{skill="fist",name="fist"},{skill="daggers_and_knives",name="daggers & knives"},{skill="bludgeoning",name="bludgeoning"},{skill="axes",name="axes"},{skill="whip_and_chains",name="whip & chains"},{skill="armor_piercing",name="armor piercing"},{skill="firearms",name="firearms"},{skill="slingshots",name="slingshots"},{skill="throwing",name="throwing"},{skill="bows_and_crossbows",name="bows & crossbows"}}
-    local weapon_entries=split(weapon_string,"|")
-    for weapon_entry in all(weapon_entries) do
-        local w={}
-        local weapon_fields=split(weapon_entry,",")
-        w.type=weapon_fields[1]
-        w.name=weapon_fields[2]
-        w.damage_type=weapon_fields[3]
-        w.skill=weapon_fields[4]
-        w.range=tonum(weapon_fields[5])
-        w.speed=tonum(weapon_fields[6])
-        w.traits=split(weapon_fields[7],";")
-        w.icon_sx=tonum(weapon_fields[8])
-        w.icon_sy=tonum(weapon_fields[9])
-        add(weapons,w)        
-    end
-    return weapons
+    weapon_types={{skill="spears_and_polearms",name="spears & polearms"},{skill="swords",name="swords"},{skill="fist",name="fist"},{skill="daggers_and_knives",name="daggers & knives"},{skill="bludgeoning",name="bludgeoning"},{skill="axes",name="axes"},{skill="whips_and_chains",name="whip & chains"},{skill="armor_piercing",name="armor piercing"},{skill="firearms",name="firearms"},{skill="slingshots",name="slingshots"},{skill="throwing",name="throwing"},{skill="bows_and_crossbows",name="bows & crossbows"}}
+    melee_string="melee,bardiche,slashing,spears_and_polearms,2,0,two-handed,0,8|melee,bastard sword,slashing,swords,1,5,versatile;parrying,8,8|melee,billhook,slashing,spears_and_polearms,2,0,two-handed,16,8|melee,cestus,bludgeoning,fist,1,20,simple,24,8|melee,claw,slashing,fist,1,20,parrying,32,8|melee,club,bludgeoning,bludgeoning_weapons,1,5,simple,40,8|melee,dagger,piercing,daggers_and_knives,1,20,thrown,48,8|melee,flail,bludgeoning,bludgeoning_weapons,1,5,none,56,8|melee,footman's maul,bludgeoning,spear_and_polearms,2,-10,two-handed,64,8|melee,glaive,slashing,spears_and_polearms,2,0,two-handed,72,8|melee,greataxe,slashing,axes,1,-10,two-handed,80,8|melee,greatclub,bludgeoning,bludgeoning,1,-10,two-handed;powerful,88,8|melee,greatsword,slashing,swords,1,-5,two-handed;powerful,96,8|melee,halberd,slashing,spears_and_polearms,2,0,two-handed,104,8|melee,hatchet,slashing,axes,1,5,simple;thrown,112,8|melee,knuckles,bludgeoning,fist,1,25,,120,8|melee,light hammer,bludgeoning,bludgeoning,1,5,,0,16|melee,longsword,slashing,swords,1,0,parrying;versatile,8,16|melee,maul,bludgeoning,bludgeoning,1,0,,16,16|melee,mace,bludgeoning,bludgeoning,1,0,,24,16|melee,meteor hammer,bludgeoning,whips_and_chains,2,0,versatile;powerful,32,16|melee,morningstar,piercing,armor_piercing,1,0,powerful,40,16|melee,pike,piercing,spears_and_polearms,2,0,two-handed,48,16|melee,pilum,piercing,spears_and_polearms,1,0,defensive;thrown,56,16|melee,quarterstaff,bludgeoning,spears_and_polearms,1,5,two-handed,64,16|melee,rapier,piercing,swords,1,10,,72,16|melee,saber,slashing,swords,1,5,parrying,80,16|melee,scimitar,slashing,swords,1,5,parrying,80,16|melee,scythe,slashing,spears_and_polearms,1,-10,two-handed;powerful,88,16|melee,shiv,piercing,daggers_and_knives,1,15,simple,96,16|melee,shortsword,slashing,swords,1,5,defensive,104,16|melee,spear,piercing,spears_and_polearms,1,5,defensive;versatile;thrown,112,16|melee,spiked chain,piercing,whips_and_chains,2,10,versatile,120,16|melee,three-section staff,bludgeoning,whips_and_chains,2,5,two-handed;parrying,0,24|melee,warhammer,bludgeoning,bludgeoning,1,-10,two-handed;powerful,8,24|melee,war pick,piercing,armor_piercing,1,-5,powerful,16,24|melee,whip,slashing,whips_and_chains,2,15,,24,24"
+    ranged_string="ranged,bolas,bludgeoning,throwing,3,0,single-use;powerful,32,24|ranged,blunderbuss,bludgeoning,firearms,2,10,two-handed;single-use,40,24|ranged,crossbow,piercing,bows_and_crossbows,7,15,two-handed;loading;simple,48,24|ranged,dart,piercing,throwing,3,20,single-use,56,24|ranged,hand crossbow,piercing,bows_and_crossbows,5,20,loading,64,24|ranged,harpoon,piercing,throwing,3,5,single-use,72,24|ranged,longbow,piercing,bows_and_crossbows,10,10,two-handed,80,24|ranged,pistol,piercing,firearms,5,30,single-use,88,24|ranged,shortbow,piercing,bows_and_crossbows,8,20,two-handed,96,24|ranged,sling,bludgeoning,slingshots,5,20,,104,24|ranged,staff sling,bludgeoning,slingshots,7,10,two-handed;powerful,112,24|ranged,throwing knife,piercing,throwing,2,15,single-use;simple,120,24"
+    melee_weapons={}
+    melee_weapons=parse_weapon_string(melee_string)
+    log("loaded "..#melee_weapons.." melee weapons")
+    ranged_weapons={}
+    ranged_weapons=parse_weapon_string(ranged_string)
+    log("loaded "..#ranged_weapons.." ranged weapons")
+    for value in all(ranged_weapons) do add(melee_weapons, value) end
+    log("returning "..#melee_weapons.." total weapons")
+    return melee_weapons
 end
 
 function load_armor()
@@ -131,4 +124,40 @@ function load_armor()
         add(armor,a)        
     end
     return armor
+end
+
+function load_shields()
+    log("loading shields from string")
+    shield_string="target,5,d4|normal,10,d6|full,15,d8"
+    shields={}
+    local shield_entries=split(shield_string,"|")
+    for shield_entry in all(shield_entries) do
+        local s={}
+        local shield_fields=split(shield_entry,",")
+        s.name=shield_fields[1]
+        s.parry_bonus=tonum(shield_fields[2])
+        s.integrity=shield_fields[3]
+        add(shields,s)        
+    end
+    return shields
+end
+
+function parse_weapon_string(string)
+    local weapons={}
+    local weapon_entries=split(string,"|")
+    for weapon_entry in all(weapon_entries) do
+        local w={}
+        local weapon_fields=split(weapon_entry,",")
+        w.type=weapon_fields[1]
+        w.name=weapon_fields[2]
+        w.damage_type=weapon_fields[3]
+        w.skill=weapon_fields[4]
+        w.range=tonum(weapon_fields[5])
+        w.speed=tonum(weapon_fields[6])
+        w.traits=split(weapon_fields[7],";")
+        w.icon_sx=tonum(weapon_fields[8])
+        w.icon_sy=tonum(weapon_fields[9])
+        add(weapons,w)        
+    end
+    return weapons
 end
